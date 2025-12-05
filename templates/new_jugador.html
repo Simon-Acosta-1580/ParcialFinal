@@ -1,0 +1,61 @@
+{% include 'header.html' %}
+
+<h1>Registrar nuevo usuario</h1>
+
+<form method="post" action="/users/" enctype="multipart/form-data">
+
+    <h3>Nombre</h3>
+    <input type="text" name="name">
+
+    <h3>Numero</h3>
+    <input type="number" name="number">
+
+    <h3>Año de nacimiento</h3>
+    <input type="number" name="year" min="1900" max="2024">
+
+    <h3>Estado</h3>
+    <input type="radio" name="status" value="true" checked> Alive
+    <input type="radio" name="status" value="false">Not Alive
+
+    <h3>Imagen</h3>
+    <input type="file" name="img" accept="image/*">
+
+    <h3>Nacionalidad</h3>
+    <input type="text" name="born">
+
+    <h3>Altura</h3>
+    <input type="number" name="height">
+
+    <h3>Peso</h3>
+    <input type="number" name="peso">
+
+    <h3>Pie dominante</h3>
+    <input type="radio" name="pie" > Diestro
+    <input type="radio" name="pie" > Zurdo
+    <input type="radio" name="pie"> Ambas piernas
+
+    <h3>Posicion</h3>
+    <input type="text" name="posicion">
+
+    <h3>Valor de fichaje</h3>
+    <input type="number" name="valor">
+
+    <h3>Año de ingreso</h3>
+    <input type="text" name="ingreso">
+
+    <h3>Estado fisico</h3>
+    <input type="text" name="statusFisico">
+
+    {% if Jugador.statusFisico != "sin lesion" %}
+    Jugador.status = False
+    {% endif %}
+
+    <h3>Suspensiones</h3>
+    <input type="text" name="suspendido">
+
+    <input type="submit" value="Registrar jugador">
+
+
+</form>
+
+{% include 'footer.html' %}
