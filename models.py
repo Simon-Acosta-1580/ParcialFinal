@@ -1,3 +1,7 @@
+from email.policy import default
+
+from sqlalchemy import table
+from sqlalchemy.orm import relationship
 from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 
@@ -22,7 +26,7 @@ class EstadisticaBase(SQLModel):
     goles: int = Field(default=0, description="Goles del jugador")
     faltas: int = Field(default=0, description="Faltas del jugador")
     targetas: int = Field(default=0, description="Faltas del jugador")
-    jugador_id: Optional[int] = Field(default=None, primary_key="jugador.id")
+    jugador_id: Optional[int] = Field(default=None, foreign_key="jugador.id")
 
 class PartidoBase(SQLModel):
     marcador: str = Field(index=True, description="goles de sigmotoa FC - goles del otro equipo")
@@ -30,3 +34,25 @@ class PartidoBase(SQLModel):
     tandaPenal: Optional[str]= Field(index=True, description="marcador de la tanda, goles de sigmotoa FC - goles del otro equipo")
     Localidad: str = Field(index=True, description="Local o Visitante")
     estadistica_id: Optional[int] = Field(default=None, foreign_key="estadistica.id")
+
+class Jugador(JugadorBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    estadisticas: list["Estadistica"] = Relationship(back_populates="jugador")
+
+class Estadistica(EstadisticaBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    jugador: Jugador = Relationship(back_populates="estadisticas")
+    partidos: list["Partido"] = Relationship(back_populates="estadistica")
+
+class Partido(PartidoBase, table= True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    estadistica: Estadistica = Relationship(back_populates="partidos")
+
+class JugadorCreate(JugadorBase):
+    pass
+
+class EstadisticaCreate(EstadisticaBase):
+    jugador_id: int = Field(foreign_key="jugador.id")
+
+class PartidoCreate(PartidoBase):
+    estadistica_id: int = Field(foreign_key="estadistica.id")
